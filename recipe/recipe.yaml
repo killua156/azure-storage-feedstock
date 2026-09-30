@@ -1,0 +1,61 @@
+schema_version: 1
+
+context:
+  version: "0.36.0"
+
+package:
+  name: azure-storage
+  version: ${{ version }}
+
+source:
+  url: https://pypi.org/packages/source/a/azure-storage/azure-storage-${{ version }}.tar.gz
+  sha256: fb6212dcbed91b49d9637aa5e8888eafdfcd523b7e560c8044d2d838bbd3ca5f
+  patches:
+    - patches/0001-drop-the-azure-bdist-wheel-option.patch
+
+build:
+  number: 1005
+  noarch: python
+  script: ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+
+requirements:
+  host:
+    - python ${{ python_min }}.*
+    - pip
+    - setuptools
+  run:
+    - python >=${{ python_min }}
+    - azure-common >=1.1.5
+    - cryptography
+    - python-dateutil
+    - requests
+
+tests:
+  - python:
+      imports:
+        - azure.storage
+        - azure.storage._http
+        - azure.storage.blob
+        - azure.storage.file
+        - azure.storage.queue
+        - azure.storage.table
+      pip_check: true
+      python_version:
+        - ${{ python_min }}.*
+        - "*"
+
+about:
+  homepage: https://github.com/Azure/azure-storage-python
+  repository: https://github.com/Azure/azure-storage-python
+  license: Apache-2.0
+  license_file: LICENSE.txt
+  summary: Microsoft Azure Storage Client Library for Python
+  description: |
+    The Microsoft Azure Storage Client Library for Python gives access to
+    the Blob, File, Queue and Table services under a single azure.storage
+    namespace. Upstream has since split these into per-service packages and
+    marked this bundle inactive, so it is kept here for existing users.
+
+extra:
+  recipe-maintainers:
+    - Maxyme

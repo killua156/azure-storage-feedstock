@@ -1,0 +1,20 @@
+Subject: [PATCH] Drop the azure-bdist-wheel option from setup.cfg
+
+setup.cfg sets `azure-namespace-package`, an option consumed by Microsoft's
+azure-bdist-wheel setuptools plugin. That plugin is long dead and is not on
+conda-forge, and current setuptools treats the unknown option as an error:
+
+  error: error in setup.cfg: command 'bdist_wheel' has no such option
+  'azure_namespace_package'
+
+The package installs fine without it.
+
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -1,6 +1,5 @@
+ [bdist_wheel]
+ universal = 1
+-azure-namespace-package = azure-nspkg
+ 
+ [egg_info]
+ tag_build = 
